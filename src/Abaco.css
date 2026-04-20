@@ -1,0 +1,96 @@
+/* Contenedor general del ábaco */
+.abaco-marco-global {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px 0;
+}
+
+/* El cuerpo de madera que contiene las columnas */
+.abaco-madera {
+  display: flex;
+  gap: 40px; /* Espacio entre la columna de Decenas y Unidades */
+  background: #8d6e63;
+  padding: 30px 40px;
+  border-radius: 20px;
+  border: 10px solid #5d4037;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.3), inset 0 0 20px rgba(0,0,0,0.2);
+}
+
+/* Estructura de cada columna individual */
+.columna-contenedor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Etiquetas D y U */
+.etiqueta-columna {
+  color: white;
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+  background: #5d4037;
+  padding: 5px 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* La columna física (donde están las fichas) */
+.columna {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(0,0,0,0.1);
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.barra-central {
+  width: 80px;
+  height: 12px;
+  background: #3e2723;
+  margin: 10px 0;
+  border-radius: 3px;
+}
+
+/* Estilo de las fichas */
+.ficha {
+  width: 65px;
+  height: 32px;
+  background: #ffccbc;
+  border-radius: 20px;
+  margin: 3px 0;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.3s;
+  border: 2px solid #d84315;
+  box-shadow: 0 3px 0 #bf360c;
+  touch-action: none;
+}
+
+/* Cuando el niño activa una ficha de abajo (valor 1) */
+.ficha.activa {
+  background: #ff5722;
+  transform: translateY(-8px); /* Sube hacia la barra */
+  box-shadow: 0 -2px 0 #bf360c;
+}
+
+/* Cuando el niño activa la ficha de arriba (valor 5) */
+.ficha-5.activa {
+  background: #ff5722;
+  transform: translateY(12px); /* Baja hacia la barra */
+  box-shadow: 0 2px 0 #bf360c;
+}
+
+/* Valor en tiempo real debajo del ábaco */
+.valor-pantalla {
+  margin-top: 25px;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #333;
+  background: #fff;
+  padding: 10px 30px;
+  border-radius: 50px;
+  border: 3px solid #4ecdc4;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}

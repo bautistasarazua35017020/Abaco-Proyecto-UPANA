@@ -1,0 +1,78 @@
+.login-contenedor {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: #f0f8ff; /* Un azul muy amigable y relajante */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.login-tarjeta {
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.login-titulo {
+  color: #ff6b6b;
+  margin-bottom: 30px;
+  font-size: 2.5rem;
+}
+
+.campo {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.campo label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.campo input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  box-sizing: border-box;
+}
+
+.campo input:focus {
+  border-color: #4ecdc4;
+  outline: none;
+}
+
+.boton-jugar {
+  background-color: #4ecdc4;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  font-size: 1.3rem;
+  font-weight: bold;
+  border-radius: 50px;
+  cursor: pointer;
+  width: 100%;
+  transition: transform 0.2s;
+}
+
+.boton-jugar:hover {
+  transform: scale(1.05);
+  background-color: #45b7aa;
+}
+
+.mensaje-alerta {
+  margin-top: 20px;
+  font-weight: bold;
+  color: #ff6b6b;
+}
