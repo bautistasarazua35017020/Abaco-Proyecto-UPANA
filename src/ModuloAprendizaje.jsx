@@ -3,56 +3,68 @@ import AbacoInteractivo from './AbacoInteractivo';
 import { useNavigate } from 'react-router-dom';
 
 const LECCIONES = [
+  // FASE 1: UNIDADES
   { 
     id: 1, tipo: 'info', 
     titulo: "El Soroban Japonés 🇯🇵", 
-    texto: "El ábaco que usarás se llama 'Soroban'. No es una calculadora, es una herramienta para entrenar tu cerebro y hacerte increíblemente rápido." 
+    texto: "Bienvenido a tu entrenamiento. El Soroban es una herramienta legendaria. No es una calculadora electrónica, es un gimnasio para tu cerebro. ¡Comencemos conociendo las reglas básicas!",
+    columnasActivas: [] 
   },
   { 
     id: 2, tipo: 'info', 
-    titulo: "El valor de las cuentas", 
-    texto: "Imagina que la barra horizontal en el centro es la 'Tierra'. \n\n• Las 4 cuentas de abajo valen 1 cada una.\n• La cuenta solitaria de arriba vale 5.\n\nSolo valen cuando 'tocan la Tierra' (la barra central)." 
+    titulo: "El Valor de las Cuentas", 
+    texto: "Observa la barra horizontal en el centro, a esa la llamamos 'Tierra'. \n\n• Las 4 cuentas de abajo valen 1.\n• La cuenta solitaria de arriba vale 5.\n\nPara que tengan valor, deben tocar la 'Tierra'.",
+    columnasActivas: [] 
   },
   { 
-    id: 3, tipo: 'info', 
-    titulo: "La técnica de arrastre 👆", 
-    texto: "Aquí no hacemos 'clic'. Tienes que ARRASTRAR las cuentas con el ratón o con el dedo como en un ábaco real:\n\n👍 El PULGAR: Sirve para arrastrar hacia ARRIBA las cuentas de abajo.\n👆 El ÍNDICE: Sirve para arrastrar hacia ABAJO la cuenta del 5." 
+    id: 3, tipo: 'libre', 
+    titulo: "Modo Exploración: Unidades 🕹️", 
+    instrucciones: "¡Inténtalo! Arrastra las cuentas de la columna iluminada con la letra 'U' (Unidades). Observa cómo cambia el número cuando las cuentas tocan la barra central.", 
+    objetivo: null,
+    columnasActivas: [12] // SOLO ENCIENDE UNIDADES
   },
   { 
-    id: 4, tipo: 'libre', 
-    titulo: "Modo Exploración Libre 🕹️", 
-    instrucciones: "¡Arrastra las cuentas de la columna 'U' hacia la barra! Observa cómo cambia el número. (Tocar rápido no funcionará, debes deslizarlas).", 
-    objetivo: null 
+    id: 4, tipo: 'interactivo', 
+    titulo: "Tu primer movimiento", 
+    instrucciones: "Usa tu dedo índice para ARRASTRAR HACIA ABAJO la cuenta superior en la columna 'U'.", 
+    objetivo: 5, animacionDedo: 'bajar-5',
+    columnasActivas: [12] 
   },
   { 
     id: 5, tipo: 'interactivo', 
-    titulo: "Prueba tu dedo Índice", 
-    instrucciones: "Usa tu dedo índice para ARRASTRAR HACIA ABAJO la cuenta de arriba en la columna 'U'.", 
-    objetivo: 5, animacionDedo: 'bajar-5' 
+    titulo: "Sumando desde abajo", 
+    instrucciones: "Ahora, usa tu pulgar para ARRASTRAR HACIA ARRIBA dos cuentas de la parte inferior.", 
+    objetivo: 2, animacionDedo: 'subir-1',
+    columnasActivas: [12] 
   },
   { 
     id: 6, tipo: 'interactivo', 
-    titulo: "Prueba tu dedo Pulgar", 
-    instrucciones: "ARRASTRA HACIA ARRIBA dos cuentas de abajo hacia la barra en la columna 'U'.", 
-    objetivo: 2, animacionDedo: 'subir-1' 
+    titulo: "Combinando: El Número 6", 
+    instrucciones: "Haz el movimiento de 'Pinza': Arrastra el 5 hacia abajo y un 1 hacia arriba al mismo tiempo.", 
+    objetivo: 6, animacionDedo: null,
+    columnasActivas: [12] 
+  },
+
+  // FASE 2: INTRODUCCIÓN A LAS DECENAS
+  { 
+    id: 7, tipo: 'info', 
+    titulo: "Las Decenas (Columna D)", 
+    texto: "¡Excelente! Ya dominas la columna de las Unidades. Ahora, la columna que está justo a su izquierda tiene la letra 'D' (Decenas).\n\nEn esta nueva columna la magia se multiplica por diez: las de abajo valen 10, 20, 30... y la grande de arriba vale 50.",
+    columnasActivas: [] 
   },
   { 
-    id: 7, tipo: 'interactivo', 
-    titulo: "La Pinza (El número 6)", 
-    instrucciones: "Arrastra el 5 hacia abajo y arrastra un 1 hacia arriba para formar el 6.", 
-    objetivo: 6, animacionDedo: null 
-  },
-  // NUEVAS LECCIONES PARA DECENAS (50)
-  { 
-    id: 8, tipo: 'info', 
-    titulo: "Las Decenas (La letra D)", 
-    texto: "La columna a la izquierda de la 'U' tiene la letra 'D' (Decenas). \n\n¡Aquí todo vale por diez! Las cuentas de abajo valen 10, 20, 30, 40... y la cuenta gigante de arriba vale 50." 
+    id: 8, tipo: 'libre', 
+    titulo: "Explorando las Decenas 🕹️", 
+    instrucciones: "Nota que ahora hay DOS columnas encendidas. Arrastra libremente las cuentas en ambas columnas y observa cómo puedes formar números grandes.", 
+    objetivo: null,
+    columnasActivas: [11, 12] // AHORA SÍ ENCIENDE DECENAS Y UNIDADES
   },
   { 
     id: 9, tipo: 'interactivo', 
     titulo: "Conociendo el 50", 
-    instrucciones: "En la columna 'D', ARRASTRA HACIA ABAJO la cuenta superior. ¡Felicidades, acabas de poner 50!", 
-    objetivo: 50, animacionDedo: 'bajar-50' 
+    instrucciones: "En la columna 'D' (la nueva), ARRASTRA HACIA ABAJO la cuenta superior. ¡Acabas de formar el número 50!", 
+    objetivo: 50, animacionDedo: 'bajar-50',
+    columnasActivas: [11, 12] 
   }
 ];
 
@@ -96,15 +108,15 @@ export default function ModuloAprendizaje() {
 
   if (mostrarMedalla) {
     return (
-      <div className="login-contenedor">
-        <div className="login-tarjeta" style={{ textAlign: 'center', padding: '50px' }}>
-          <h1 style={{ fontSize: '4rem', animation: 'aparecer 1s ease-out' }}>🏅</h1>
-          <h2 style={{ color: '#ff9f43' }}>¡FELICIDADES, APRENDIZ AVANZADO!</h2>
-          <p style={{ fontSize: '1.2rem', margin: '20px 0' }}>
-            Ahora dominas el arrastre de cuentas, las Unidades y las Decenas.
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#fafafa' }}>
+        <div style={{ textAlign: 'center', padding: '40px', backgroundColor: '#fff', borderRadius: '20px', boxShadow: '0 10px 30px rgba(0,0,0,0.05)', maxWidth: '400px' }}>
+          <h1 style={{ fontSize: '4rem', margin: 0, animation: 'aparecer 1s ease-out' }}>🏅</h1>
+          <h2 style={{ color: '#ff9f43', marginTop: '15px' }}>¡ENTRENAMIENTO COMPLETADO!</h2>
+          <p style={{ color: '#8e8e93', fontSize: '1.1rem', marginBottom: '30px' }}>
+            Ya entiendes el secreto de las Unidades y Decenas.
           </p>
-          <button className="boton-jugar" onClick={() => navigate('/menu')} style={{ backgroundColor: '#4ecdc4' }}>
-            Volver al Menú Principal
+          <button className="boton-jugar" onClick={() => navigate('/menu')} style={{ backgroundColor: '#0095f6', width: '100%', borderRadius: '10px' }}>
+            Volver al Inicio
           </button>
         </div>
       </div>
@@ -112,58 +124,74 @@ export default function ModuloAprendizaje() {
   }
 
   return (
-    <div className="login-contenedor">
-      <div className="login-tarjeta" style={{ maxWidth: '800px', width: '90%' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-           <span style={{ color: '#4ecdc4', fontWeight: 'bold', fontSize: '1.2rem' }}>Paso {leccionActual + 1} de {LECCIONES.length}</span>
-           <button onClick={() => navigate('/menu')} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.5rem', color: '#999' }}>✕</button>
+    <div style={{ minHeight: '100vh', backgroundColor: '#fafafa', padding: '20px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      
+      {/* Tarjeta estilo App Moderna */}
+      <div style={{ backgroundColor: '#ffffff', borderRadius: '24px', boxShadow: '0 10px 30px rgba(0,0,0,0.05)', maxWidth: '600px', width: '100%', padding: '30px', position: 'relative' }}>
+        
+        {/* Header simple */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #efefef', paddingBottom: '15px', marginBottom: '20px' }}>
+           <span style={{ color: '#8e8e93', fontWeight: '600', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '1px' }}>
+             Paso {leccionActual + 1} de {LECCIONES.length}
+           </span>
+           <button onClick={() => navigate('/menu')} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.5rem', color: '#262626' }}>✕</button>
         </div>
 
-        <h2 style={{ color: '#ff6b6b', fontSize: '2rem' }}>{leccion.titulo}</h2>
+        <h2 style={{ color: '#262626', fontSize: '1.8rem', fontWeight: '700', marginBottom: '15px', textAlign: 'center' }}>
+          {leccion.titulo}
+        </h2>
 
+        {/* CONTENIDO TEÓRICO */}
         {leccion.tipo === 'info' && (
-          <div style={{ padding: '20px', fontSize: '1.3rem', lineHeight: '1.8', color: '#444', textAlign: 'left', whiteSpace: 'pre-line' }}>
-            {leccion.texto}
-            <div style={{ textAlign: 'center', marginTop: '40px' }}>
-              <button className="boton-jugar" onClick={siguienteLeccion} style={{ backgroundColor: '#54a0ff' }}>Entendido →</button>
-            </div>
+          <div style={{ padding: '10px 0' }}>
+            <p style={{ fontSize: '1.2rem', lineHeight: '1.6', color: '#262626', whiteSpace: 'pre-line', textAlign: 'center' }}>
+              {leccion.texto}
+            </p>
+            <button className="boton-jugar" onClick={siguienteLeccion} style={{ backgroundColor: '#0095f6', width: '100%', borderRadius: '12px', marginTop: '30px' }}>
+              Entendido
+            </button>
           </div>
         )}
 
-        {leccion.tipo === 'libre' && (
-          <div style={{ textAlign: 'center' }}>
-            <p style={{ fontSize: '1.2rem', backgroundColor: '#e8f5e9', padding: '15px', borderRadius: '10px', color: '#2e7d32', textAlign: 'left' }}>
-              {leccion.instrucciones}
-            </p>
-            <AbacoInteractivo key={leccionActual} onValueChange={manejarCambioValor} modoLibre={true} />
-            <div style={{ marginTop: '20px', padding: '15px', background: '#fff', borderRadius: '15px', border: '3px solid #ff9f43', display: 'inline-block' }}>
-               <span style={{ fontSize: '1.2rem', color: '#666' }}>Valor actual:</span>
-               <span style={{ fontSize: '3rem', fontWeight: 'bold', color: '#ff6b6b', marginLeft: '15px' }}>{valorEnAbaco}</span>
-            </div>
-            <div style={{ marginTop: '30px' }}>
-              <button className="boton-jugar" onClick={siguienteLeccion} style={{ backgroundColor: '#ff9f43' }}>Ya dominé el arrastre →</button>
-            </div>
-          </div>
-        )}
-
-        {leccion.tipo === 'interactivo' && (
-          <div style={{ textAlign: 'center' }}>
-            <p style={{ fontSize: '1.2rem', backgroundColor: '#f0f8ff', padding: '15px', borderRadius: '10px', color: '#0056b3', textAlign: 'left' }}>
-              {leccion.instrucciones}
-            </p>
-            <AbacoInteractivo key={leccionActual} onValueChange={manejarCambioValor} animacionActiva={leccion.animacionDedo} />
+        {/* CONTENIDO PRÁCTICO / LIBRE */}
+        {(leccion.tipo === 'libre' || leccion.tipo === 'interactivo') && (
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             
-            {completado ? (
-              <div style={{ marginTop: '20px', animation: 'aparecer 0.5s ease-in' }}>
-                <p style={{ color: '#4caf50', fontWeight: 'bold', fontSize: '1.3rem' }}>¡Excelente movimiento de dedos! ✨</p>
-                <button className="boton-jugar" onClick={siguienteLeccion} style={{ backgroundColor: '#4caf50', marginTop: '10px' }}>
-                  {leccionActual < LECCIONES.length - 1 ? "Siguiente Práctica →" : "¡Reclamar Medalla! 🏅"}
-                </button>
-              </div>
-            ) : (
-              <p style={{ color: '#666', marginTop: '20px', fontSize: '1.2rem' }}>
-                Valor actual: <strong>{valorEnAbaco}</strong> (Objetivo: <span style={{ color: '#ff6b6b', fontWeight: 'bold' }}>{leccion.objetivo}</span>)
-              </p>
+            <p style={{ fontSize: '1.1rem', backgroundColor: '#f8f9fa', padding: '15px', borderRadius: '12px', color: '#262626', textAlign: 'center', width: '100%', border: '1px solid #efefef' }}>
+              {leccion.instrucciones}
+            </p>
+
+            {/* Ábaco con paso estricto de columnas */}
+            <AbacoInteractivo 
+              key={leccionActual} 
+              onValueChange={manejarCambioValor} 
+              animacionActiva={leccion.animacionDedo}
+              columnasActivas={leccion.columnasActivas} 
+            />
+
+            {/* Monitor de valor */}
+            <div style={{ marginTop: '15px', padding: '10px 20px', backgroundColor: '#fafafa', borderRadius: '20px', border: '1px solid #efefef', display: 'flex', alignItems: 'center', gap: '10px' }}>
+               <span style={{ fontSize: '1rem', color: '#8e8e93', fontWeight: '500' }}>Valor en Ábaco:</span>
+               <span style={{ fontSize: '2rem', fontWeight: '800', color: '#262626' }}>{valorEnAbaco}</span>
+            </div>
+
+            {/* Validaciones y Botones */}
+            {leccion.tipo === 'interactivo' && !completado && (
+               <p style={{ color: '#ed4956', marginTop: '15px', fontWeight: '600' }}>
+                 Objetivo: Formar el {leccion.objetivo}
+               </p>
+            )}
+
+            {completado && leccion.tipo === 'interactivo' && (
+              <button className="boton-jugar" onClick={siguienteLeccion} style={{ backgroundColor: '#38a169', width: '100%', borderRadius: '12px', marginTop: '20px', animation: 'aparecer 0.3s ease-out' }}>
+                ¡Correcto! Continuar →
+              </button>
+            )}
+
+            {leccion.tipo === 'libre' && (
+              <button className="boton-jugar" onClick={siguienteLeccion} style={{ backgroundColor: '#0095f6', width: '100%', borderRadius: '12px', marginTop: '20px' }}>
+                Listo, vamos a la práctica →
+              </button>
             )}
           </div>
         )}
