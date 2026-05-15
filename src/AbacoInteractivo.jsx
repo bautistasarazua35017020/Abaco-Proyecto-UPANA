@@ -3,7 +3,9 @@ import './Abaco.css';
 
 export default function AbacoInteractivo({ onValueChange, animacionActiva, columnasActivas = [] }) {
   const [columnas, setColumnas] = useState(Array(13).fill({ arriba: false, abajo: 0 }));
-  const [startY, setStartY] = useState(null);
+  
+  // Nuevo estado para rastrear el arrastre en tiempo real
+  const [dragState, setDragState] = useState(null);
 
   useEffect(() => {
     const valD = (columnas[11].arriba ? 5 : 0) + columnas[11].abajo;
@@ -11,79 +13,98 @@ export default function AbacoInteractivo({ onValueChange, animacionActiva, colum
     if (onValueChange) onValueChange((valD * 10) + valU);
   }, [columnas, onValueChange]);
 
-  const iniciarArrastre = (e) => {
-    setStartY(e.clientY || e.touches?.[0]?.clientY);
+  // 1. Cuando el usuario toca la cuenta (Inicia el rastreo)
+  const iniciarArrastre = (e, index, esArriba, valorFicha) => {
+    // Esta línea mágica "captura" el ratón/dedo para que no pierda el objetivo si se mueve muy rápido
+    e.target.setPointerCapture(e.pointerId); 
+    
+    setDragState({
+      startY: e.clientY || e.touches?.[0]?.clientY,
+      index,
+      esArriba,
+      valorFicha
+    });
   };
 
-  const finalizarArrastre = (e, index, esArriba, valorFicha) => {
-    if (startY === null) return;
-    
-    const endY = e.clientY || e.changedTouches?.[0]?.clientY || startY;
-    const distancia = endY - startY;
-    const umbralArrastre = 10; // Reducido para pantallas pequeñas
+  // 2. Mientras el usuario mueve el dedo/mouse (Reacción instantánea)
+  const moverArrastre = (e) => {
+    if (!dragState) return;
 
-    // LÓGICA ESTRICTA: Si la columna no está autorizada por la lección, no hace nada.
-    if (!columnasActivas.includes(index)) { 
-      setStartY(null); 
-      return; 
-    }
+    const currentY = e.clientY || e.touches?.[0]?.clientY;
+    const distancia = currentY - dragState.startY;
 
-    if (Math.abs(distancia) > umbralArrastre) {
+    // SENSIBILIDAD ULTRA FINA: Solo 3 píxeles de movimiento para que reaccione
+    if (Math.abs(distancia) > 3) {
+      if (!columnasActivas.includes(dragState.index)) {
+        setDragState(null);
+        return;
+      }
+
       const nuevasColumnas = [...columnas];
-      const col = { ...nuevasColumnas[index] };
+      const col = { ...nuevasColumnas[dragState.index] };
 
-      if (esArriba) {
+      if (dragState.esArriba) {
         if (distancia > 0 && !col.arriba) col.arriba = true;
         else if (distancia < 0 && col.arriba) col.arriba = false;
       } else {
-        if (distancia < 0) col.abajo = Math.max(col.abajo, valorFicha); 
-        else if (distancia > 0) col.abajo = Math.min(col.abajo, valorFicha - 1);
+        if (distancia < 0) col.abajo = Math.max(col.abajo, dragState.valorFicha); 
+        else if (distancia > 0) col.abajo = Math.min(col.abajo, dragState.valorFicha - 1);
       }
-      nuevasColumnas[index] = col;
+      
+      nuevasColumnas[dragState.index] = col;
       setColumnas(nuevasColumnas);
+      
+      // Terminamos el arrastre al instante para que la cuenta haga "snap" (se encaje) de una vez
+      setDragState(null);
     }
-    setStartY(null);
+  };
+
+  // 3. Cuando suelta o el ratón sale (Limpiamos)
+  const finalizarArrastre = (e) => {
+    if (e && e.target && e.target.releasePointerCapture && e.pointerId) {
+      try { e.target.releasePointerCapture(e.pointerId); } catch(err) {}
+    }
+    setDragState(null);
   };
 
   return (
     <div className="abaco-marco-global">
       <div className="abaco-madera">
         {columnas.map((col, index) => {
-          // La columna brilla solo si la lección lo permite
           const esActiva = columnasActivas.includes(index);
-          
           return (
             <div key={index} className={`columna-contenedor ${esActiva ? 'columna-activa' : 'columna-inactiva'}`}>
               
-              {/* Etiquetas D y U solo para las columnas 11 y 12 cuando estén activas */}
               {esActiva && (index === 11 || index === 12) && (
-                <div style={{ color: 'white', fontWeight: 'bold', marginBottom: '8px', fontSize: '1rem', textAlign: 'center' }}>
+                <div style={{ color: 'white', fontWeight: '900', marginBottom: '8px', fontSize: '1.4rem', textShadow: '2px 2px 4px #000' }}>
                   {index === 11 ? 'D' : 'U'}
                 </div>
               )}
 
               <div className="columna">
-                {index === 12 && animacionActiva === 'bajar-5' && !col.arriba && <div className="dedo-animado dedo-indice">👆⬇️</div>}
-                {index === 11 && animacionActiva === 'bajar-50' && !col.arriba && <div className="dedo-animado dedo-indice">👆⬇️</div>}
+                {index === 12 && animacionActiva === 'bajar-5' && !col.arriba && <div className="dedo-animado dedo-indice emoji-sticker">👇</div>}
+                {index === 11 && animacionActiva === 'bajar-50' && !col.arriba && <div className="dedo-animado dedo-indice emoji-sticker">👇</div>}
                 
                 <div 
                   className={`ficha ficha-5 ${col.arriba ? 'activa' : ''}`} 
-                  onPointerDown={iniciarArrastre}
-                  onPointerUp={(e) => finalizarArrastre(e, index, true, 5)}
-                  onPointerOut={(e) => startY && finalizarArrastre(e, index, true, 5)}
+                  onPointerDown={(e) => iniciarArrastre(e, index, true, 5)}
+                  onPointerMove={moverArrastre}
+                  onPointerUp={finalizarArrastre}
+                  onPointerCancel={finalizarArrastre}
                 />
                 
                 <div className="barra-central" />
                 
-                {index === 12 && animacionActiva === 'subir-1' && col.abajo === 0 && <div className="dedo-animado dedo-pulgar">👍⬆️</div>}
+                {index === 12 && animacionActiva === 'subir-1' && col.abajo === 0 && <div className="dedo-animado dedo-pulgar emoji-sticker">👍</div>}
 
                 {[1, 2, 3, 4].map((i) => (
                   <div 
                     key={i}
                     className={`ficha ficha-1 ${col.abajo >= i ? 'activa' : ''}`}
-                    onPointerDown={iniciarArrastre}
-                    onPointerUp={(e) => finalizarArrastre(e, index, false, i)}
-                    onPointerOut={(e) => startY && finalizarArrastre(e, index, false, i)}
+                    onPointerDown={(e) => iniciarArrastre(e, index, false, i)}
+                    onPointerMove={moverArrastre}
+                    onPointerUp={finalizarArrastre}
+                    onPointerCancel={finalizarArrastre}
                   />
                 ))}
               </div>

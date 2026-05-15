@@ -1,23 +1,25 @@
-/* Contenedor principal con estilo moderno */
+/* =========================================
+   ESTILOS DEL ÁBACO (Tamaño Equilibrado y Opacidad Restaurada)
+========================================== */
 .abaco-marco-global {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 15px 0;
   width: 100%;
-  overflow-x: auto;
-  padding-bottom: 10px;
+  margin: 10px 0;
 }
 
-/* Ábaco más compacto */
 .abaco-madera {
   display: flex;
-  gap: 4px; /* Menos espacio entre columnas */
-  background: #c08457;
-  padding: 12px;
-  border-radius: 8px;
-  border: 10px solid #5d4037; /* Borde más delgado */
-  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  justify-content: space-between;
+  width: 100%;
+  background-color: #FFCA28 !important; 
+  padding: 25px 15px; 
+  border-radius: 16px;
+  border: 12px solid #F57F17 !important; 
+  box-shadow: 0 15px 25px rgba(0,0,0,0.15), inset 0 5px 10px rgba(255,255,255,0.4);
+  box-sizing: border-box;
+  min-height: 350px; 
 }
 
 .columna-contenedor {
@@ -25,18 +27,22 @@
   flex-direction: column;
   align-items: center;
   position: relative;
-  transition: opacity 0.3s ease, background-color 0.3s ease;
+  flex: 1;
+  transition: all 0.3s ease;
 }
 
+/* RESTAURADO: Tu efecto original para mostrar que están deshabilitadas */
 .columna-inactiva {
-  opacity: 0.3;
+  opacity: 0.25; 
   pointer-events: none;
 }
 
 .columna-activa {
   opacity: 1;
-  background-color: rgba(255, 255, 255, 0.15);
-  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.25);
+  border-radius: 12px;
+  transform: scale(1.02); 
+  z-index: 5;
 }
 
 .columna {
@@ -44,88 +50,87 @@
   flex-direction: column;
   align-items: center;
   position: relative;
+  width: 100%;
 }
 
-/* Varilla central */
 .columna::before {
   content: '';
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 3px;
-  background: #3e2723;
+  width: 8px; 
+  background-color: #795548 !important; 
   z-index: 0;
+  border-radius: 4px;
 }
 
 .barra-central {
-  width: 38px;
-  height: 8px;
-  background: #271815;
-  margin: 10px 0;
+  width: 100%;
+  min-width: 50px; 
+  height: 12px; 
+  background-color: #212121 !important; 
+  margin: 25px 0; 
   z-index: 2;
-  border-top: 1px solid #795548;
+  border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.4);
 }
 
-/* Fichas más pequeñas e ideales para el toque móvil */
+/* FICHAS GIGANTES (Ajustadas para que quepan las 13 columnas) */
 .ficha {
-  width: 32px;
-  height: 16px;
-  background: #ffccbc;
-  border-radius: 8px;
-  margin: 2px 0;
+  width: 55px; /* Tamaño ideal: Gigantes pero sin romper la pantalla */
+  height: 32px; 
+  background-color: #FFFFFF !important; 
+  border-radius: 40px; 
+  margin: 4px 0;
   cursor: pointer;
-  transition: transform 0.1s ease-out, background-color 0.2s;
-  border: 1px solid #d84315;
-  box-shadow: 0 2px 0 #bf360c;
+  transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 6px 10px rgba(0,0,0,0.3), inset 0 -4px 6px rgba(0,0,0,0.1);
   z-index: 1;
-  touch-action: none; /* EVITA QUE LA PANTALLA SE MUEVA AL ARRASTRAR EN MÓVILES */
+  touch-action: none;
+  border: 1px solid #E0E0E0;
 }
 
-/* Movimiento de las cuentas ajustado al nuevo tamaño */
-.ficha.activa {
-  transform: translateY(-8px);
-  background: #ff7043;
-}
-.ficha-5.activa {
-  transform: translateY(8px);
-  background: #ff7043;
+.ficha.activa { transform: translateY(-18px); }
+.ficha-5.activa { transform: translateY(18px); }
+
+.emoji-sticker {
+  display: inline-block;
+  font-size: 3.5rem;
+  text-shadow: 
+    3px 3px 0 #fff, -3px -3px 0 #fff, 3px -3px 0 #fff, -3px 3px 0 #fff,
+    3px 0px 0 #fff, -3px 0px 0 #fff, 0px 3px 0 #fff, 0px -3px 0 #fff;
+  filter: drop-shadow(0px 8px 6px rgba(0,0,0,0.3));
+  margin-bottom: 15px;
+  animation: flotar 2s infinite ease-in-out;
 }
 
 .dedo-animado {
   position: absolute;
-  font-size: 1.5rem;
+  font-size: 3.5rem; 
   z-index: 10;
-  animation: moverDedo 1.5s infinite;
   pointer-events: none;
+  animation: moverDedo 1.5s infinite;
 }
-.dedo-indice { top: -15px; }
-.dedo-pulgar { bottom: -15px; }
+.dedo-indice { top: -45px; }
+.dedo-pulgar { bottom: -45px; }
 
 @keyframes moverDedo {
   0% { transform: translateY(0) scale(1); opacity: 0; }
   20% { opacity: 1; transform: scale(1.1); }
-  80% { transform: translateY(10px) scale(0.9); opacity: 1; }
+  80% { transform: translateY(18px) scale(0.9); opacity: 1; }
   100% { opacity: 0; }
 }
 
-/* --- RESPONSIVIDAD PARA MÓVILES --- */
-@media (max-width: 600px) {
-  .abaco-madera {
-    gap: 2px;
-    padding: 8px;
-    border-width: 6px;
-  }
-  .ficha {
-    width: 24px;
-    height: 12px;
-    border-radius: 6px;
-    margin: 1px 0;
-  }
-  .barra-central {
-    width: 28px;
-    height: 6px;
-    margin: 8px 0;
-  }
-  .ficha.activa { transform: translateY(-6px); }
-  .ficha-5.activa { transform: translateY(6px); }
+@keyframes flotar {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+  100% { transform: translateY(0px); }
+}
+
+@media (max-width: 1200px) {
+  .abaco-madera { padding: 15px; min-height: 250px; }
+  .ficha { width: 40px; height: 24px; }
+  .barra-central { min-width: 40px; margin: 18px 0; height: 10px; }
+  .ficha.activa { transform: translateY(-12px); }
+  .ficha-5.activa { transform: translateY(12px); }
 }

@@ -1,0 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800;900&display=swap');
+
+body {
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px; /* Tamaño solicitado */
+  margin: 0;
+  padding: 0;
+  background-color: #f0f4f8; /* Un fondo gris azulado muy suave por defecto */
+}
