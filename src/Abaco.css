@@ -1,5 +1,5 @@
 /* =========================================
-   ESTILOS DEL ÁBACO (Tamaño Equilibrado y Opacidad Restaurada)
+   ESTILOS DEL ÁBACO (Tamaño Soroban Calibrado)
 ========================================== */
 .abaco-marco-global {
   display: flex;
@@ -13,13 +13,16 @@
   display: flex;
   justify-content: space-between;
   width: 100%;
+  max-width: 100%;
   background-color: #FFCA28 !important; 
-  padding: 25px 15px; 
+  padding: 20px 15px; /* Redujimos un poco el padding superior e inferior */
   border-radius: 16px;
   border: 12px solid #F57F17 !important; 
   box-shadow: 0 15px 25px rgba(0,0,0,0.15), inset 0 5px 10px rgba(255,255,255,0.4);
   box-sizing: border-box;
-  min-height: 350px; 
+  
+  /* 1. Redujimos la altura para quitar la madera sobrante de abajo */
+  min-height: 340px; 
 }
 
 .columna-contenedor {
@@ -29,9 +32,11 @@
   position: relative;
   flex: 1;
   transition: all 0.3s ease;
+  
+  /* 2. Empuja todo el contenido hacia la base del ábaco */
+  justify-content: flex-end; 
 }
 
-/* RESTAURADO: Tu efecto original para mostrar que están deshabilitadas */
 .columna-inactiva {
   opacity: 0.25; 
   pointer-events: none;
@@ -53,6 +58,7 @@
   width: 100%;
 }
 
+/* La varilla de madera de fondo */
 .columna::before {
   content: '';
   position: absolute;
@@ -69,29 +75,44 @@
   min-width: 50px; 
   height: 12px; 
   background-color: #212121 !important; 
-  margin: 25px 0; 
+  
+  /* 3. El vacío exacto para que la ficha viaje (35px) */
+  margin: 70px 0; 
   z-index: 2;
   border-radius: 6px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.4);
 }
 
-/* FICHAS GIGANTES (Ajustadas para que quepan las 13 columnas) */
+/* Fichas con ajuste de precisión absoluta */
 .ficha {
-  width: 55px; /* Tamaño ideal: Gigantes pero sin romper la pantalla */
+  width: 55px; 
   height: 32px; 
   background-color: #FFFFFF !important; 
   border-radius: 40px; 
-  margin: 4px 0;
+  margin: 1.5px 0;
   cursor: pointer;
-  transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+  /* Transición más rápida para que la respuesta sea inmediata */
+  transition: transform 0.08s ease-out; 
   box-shadow: 0 6px 10px rgba(0,0,0,0.3), inset 0 -4px 6px rgba(0,0,0,0.1);
   z-index: 1;
   touch-action: none;
   border: 1px solid #E0E0E0;
 }
 
-.ficha.activa { transform: translateY(-18px); }
-.ficha-5.activa { transform: translateY(18px); }
+/* AJUSTE FINO:
+   Si el "gap" persiste, incrementa estos valores. 
+   Si se pasan y tapan la barra, redúcelos.
+   44px es el número mágico para el diseño que tienes ahora.
+*/
+.ficha.activa { 
+  transform: translateY(-69px); 
+  z-index: 5; /* Asegura que la ficha pase por encima de la barra */
+}
+.ficha-5.activa { 
+  transform: translateY(69px); 
+  z-index: 5;
+}
+
 
 .emoji-sticker {
   display: inline-block;
@@ -111,8 +132,10 @@
   pointer-events: none;
   animation: moverDedo 1.5s infinite;
 }
-.dedo-indice { top: -45px; }
-.dedo-pulgar { bottom: -45px; }
+
+/* Ajuste de los deditos para la nueva altura */
+.dedo-indice { top: -35px; }
+.dedo-pulgar { bottom: -35px; }
 
 @keyframes moverDedo {
   0% { transform: translateY(0) scale(1); opacity: 0; }
@@ -127,10 +150,13 @@
   100% { transform: translateY(0px); }
 }
 
+/* Adaptación para pantallas pequeñas / Tablets */
 @media (max-width: 1200px) {
   .abaco-madera { padding: 15px; min-height: 250px; }
-  .ficha { width: 40px; height: 24px; }
-  .barra-central { min-width: 40px; margin: 18px 0; height: 10px; }
-  .ficha.activa { transform: translateY(-12px); }
-  .ficha-5.activa { transform: translateY(12px); }
+  .ficha { width: 42px; height: 26px; margin: 1px 0; }
+  .barra-central { min-width: 40px; margin: 25px 0; height: 10px; }
+  
+  /* Viaje proporcional a la pantalla pequeña */
+  .ficha.activa { transform: translateY(-38px); }
+  .ficha-5.activa { transform: translateY(38px); }
 }
